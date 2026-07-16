@@ -56,6 +56,35 @@ sudo apt install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin d
 # Thêm user vào group docker
 sudo usermod -aG docker $USER
 
+echo "=== [7/8] Cài đặt Visual Studio Code ==="
+curl -fsSL --retry 3 --retry-delay 2 https://packages.microsoft.com/keys/microsoft.asc | sudo gpg --dearmor --yes -o /etc/apt/keyrings/packages.microsoft.gpg
+echo "deb [arch=amd64,arm64,armhf signed-by=/etc/apt/keyrings/packages.microsoft.gpg] https://packages.microsoft.com/repos/code stable main" | sudo tee /etc/apt/sources.list.d/vscode.list > /dev/null
+sudo apt update
+sudo apt install -y code
+
+# Tắt Telemetry của VS Code
+echo "Tắt Telemetry của VS Code..."
+mkdir -p ~/.config/Code/User
+python3 -c '
+import json, os
+path = os.path.expanduser("~/.config/Code/User/settings.json")
+data = {}
+if os.path.exists(path):
+    try:
+        with open(path, "r") as f: data = json.load(f)
+    except: pass
+data["telemetry.telemetryLevel"] = "off"
+data["telemetry.enableTelemetry"] = False
+data["telemetry.enableCrashReporter"] = False
+with open(path, "w") as f: json.dump(data, f, indent=4)
+'
+
+echo "=== [8/8] Cài đặt DBeaver CE ==="
+curl -fsSL --retry 3 --retry-delay 2 https://dbeaver.io/debs/dbeaver.gpg.key | sudo gpg --dearmor --yes -o /etc/apt/keyrings/dbeaver.gpg
+echo "deb [signed-by=/etc/apt/keyrings/dbeaver.gpg] https://dbeaver.io/debs/dbeaver-ce /" | sudo tee /etc/apt/sources.list.d/dbeaver.list > /dev/null
+sudo apt update
+sudo apt install -y dbeaver-ce
+
 echo "=== XÁC MINH CÀI ĐẶT ==="
 export JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64
 export PATH=$JAVA_HOME/bin:$PATH

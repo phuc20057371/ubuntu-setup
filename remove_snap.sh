@@ -68,4 +68,7 @@ echo "Installing Flatpak..."
 sudo apt-get install -y flatpak
 flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
 
+echo "Installing GNOME tools..."
+sudo apt-get install -y gnome-tweaks gnome-shell-extension-manager gnome-software gnome-software-plugin-flatpak
+
 echo "Snap removal and setup complete!"
